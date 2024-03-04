@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservice
+  labels:
+    app: microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microservice
+  template:
+    metadata:
+      labels:
+        app: microservice
+    spec:
+      containers:
+      - name: microservice
+        image: api-micro:1
+        ports:
+        - containerPort: 8000
+        env:
+        - name: COUCHDB_URL
+          valueFrom:
+            configMapKeyRef:
+              name: microservice-configmap
+              key: COUCHDB_URL
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: microservice-configmap  
+              key: DB_NAME
+        - name: COUCHDB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: microservice-secrets 
+              key: COUCHDB_USERNAME
+        - name: COUCHDB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: microservice-secrets 
+              key: COUCHDB_PASSWORD
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
