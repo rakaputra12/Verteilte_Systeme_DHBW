@@ -30,59 +30,46 @@
 
     <script>
       function sendRequest() {
-        // Get the input values
         var endpoint = document.getElementById("endpoint").value;
         var method = document.getElementById("method").value;
     
-        // Check if the endpoint is not empty
         if (endpoint.trim() === "") {
           alert("Please enter the API endpoint");
           return;
         }
     
-        // Construct the URL based on user input
         var url = endpoint;
-        // Make the HTTP request
         axios({
           method: method,
           url: url,
         })
           .then(function (response) {
-            // Handle the successful response from Flask
             console.log(response);
     
-            // Display status code
             var statusCodeElement = document.getElementById("status-code");
             statusCodeElement.innerText = "Status Code: " + response.status;
     
-            // Apply CSS class based on status code
             statusCodeElement.className =
               response.status === 200 || response.status === 204 ? "success" : "";
     
-            // Display headers
             var headersString =
               "Headers: \n \n" + JSON.stringify(response.headers, null, 2);
             document.getElementById("response-headers").innerHTML =
               "<pre>" + headersString + "</pre>";
     
-            // Display response body
             var responseBodyString =
               "Response Body: \n \n" + JSON.stringify(response.data, null, 2);
             document.getElementById("response-body").innerHTML =
               "<pre>" + responseBodyString + "</pre>";
           })
           .catch(function (error) {
-            // Handle errors
     
-            // Display status code for error
             if (error.response) {
-              // Display status code for error
               var statusCodeElementError = document.getElementById("status-code");
               statusCodeElementError.innerText =
                 "Status Code: " +
                 (error.response ? error.response.status : "Network Error");
     
-              // Apply CSS class based on status code
               statusCodeElementError.className =
                 error.response.status === 401 ||
                 error.response.status === 500 ||
@@ -92,13 +79,11 @@
                   ? "error"
                   : "success";
     
-              // Display headers for error
               var headersStringError =
                 "Headers: " + JSON.stringify(error.response.headers, null, 2);
               document.getElementById("response-headers").innerHTML =
                 "<pre>" + headersStringError + "</pre>";
     
-              // Display response body for error
               var responseBodyStringError =
                 "Response Body: " + JSON.stringify(error.response.data, null, 2);
               document.getElementById("response-body").innerHTML =

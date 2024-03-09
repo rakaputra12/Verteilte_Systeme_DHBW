@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>REST Client</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="style_2.css" />
+  </head>
+  <body>
+    <div class="banner">
+      <h1 class="title">REST Client Online Birthday DB</h1>
+    </div>
+    
+    <div class="request">
+      <label class="label" for="month">Month:</label>
+      <input type="number" id="month" placeholder="Enter month" required />
+
+      <label class="label" for="day">Day:</label>
+      <input type="number" id="day" placeholder="Enter day" required />
+    </div>
+    <div>
+      <button class="button" onclick="getDataByDate()">Get Data by Date</button>
+    </div>
+    <div>
+      <button class="button" onclick="checkHealth()">Check Health</button>
+    </div>
+
+    <div id="response">
+      <div id="status-code"></div>
+      <div id="response-headers"></div>
+      <div id="response-body"></div>
+      <div id="health-status"></div>
+    </div>
+
+    <script>
+      function getDataByDate() {
+        var month = document.getElementById("month").value;
+        var day = document.getElementById("day").value;
+
+        if (month.trim() === "" || day.trim() === "") {
+          alert("Please enter both month and day");
+          return;
+        }
+
+        hideHealthStatus();
+
+        // Hier muss der Endpoint angepasst werden, wenn die Anwendung nicht auf dem K8s läuft.
+        var url = `http://localhost/api/v1/get_data?month=${month}&day=${day}`;
+
+        axios({
+          method: "POST",
+          url: url,
+        })
+          .then(function (response) {
+            displayResponse(response);
+          })
+          .catch(function (error) {
+            handleErrorResponse(error);
+          });
+      }
+
+      function checkHealth() {
+        // Hier muss der Endpoint angepasst werden, wenn die Anwendung nicht auf dem K8s läuft.
+        var url = "http://localhost/health";
+
+        axios({
+          method: "GET",
+          url: url,
+        })
+          .then(function (response) {
+            displayHealthStatus(response);
+            showHealthStatus();
+            clearResponseBody();
+          })
+          .catch(function (error) {
+            handleErrorResponse(error);
+          });
+      }
+
+      function displayResponse(response) {
+        var data = response.data;
+
+        if (Array.isArray(data) && data.length > 0) {
+          var tableHtml =
+            "<table>" +
+            "<tr><th>Name</th><th>Profession</th><th>Born</th></tr>";
+
+          data.forEach(function (person) {
+            tableHtml +=
+              "<tr><td>" +
+              person.name +
+              "</td><td>" +
+              person.profession +
+              "</td><td>" +
+              person.born +
+              "</td></tr>";
+          });
+
+          tableHtml += "</table>";
+
+          document.getElementById("response-body").innerHTML = tableHtml;
+        } else {
+          document.getElementById("response-body").innerHTML =
+            "Data not available.";
+        }
+      }
+
+      function displayHealthStatus(response) {
+        var healthStatusElement = document.getElementById("health-status");
+        healthStatusElement.innerText =
+          "Health Status: " + response.data.status;
+      }
+
+      function showHealthStatus() {
+        var healthStatusElement = document.getElementById("health-status");
+        healthStatusElement.style.display = "block";
+      }
+
+      function hideHealthStatus() {
+        var healthStatusElement = document.getElementById("health-status");
+        healthStatusElement.style.display = "none";
+      }
+
+      function clearResponseBody() {
+        document.getElementById("response-body").innerHTML = "";
+      }
+
+      function handleErrorResponse(error) {
+
+        if (error.response) {
+          var statusCodeElementError = document.getElementById("status-code");
+          statusCodeElementError.innerText =
+            "Status Code: " +
+            (error.response ? error.response.status : "Network Error");
+
+          statusCodeElementError.className =
+            error.response.status === 401 ||
+            error.response.status === 500 ||
+            error.response.status === 422 ||
+            error.response.status === 405 ||
+            error.response.status === 404
+              ? "error"
+              : "success";
+
+          var headersStringError =
+            "Headers: " + JSON.stringify(error.response.headers, null, 2);
+          document.getElementById("response-headers").innerHTML =
+            "<pre>" + headersStringError + "</pre>";
+
+          var responseBodyStringError =
+            "Response Body: " + JSON.stringify(error.response.data, null, 2);
+          document.getElementById("response-body").innerHTML =
+            "<pre>" + responseBodyStringError + "</pre>";
+        } else {
+          document.getElementById("status-code").innerText =
+            "Status Code: " +
+            (error.response
+              ? error.response.status
+              : "500 Internal Server Error");
+        }
+      }
+    </script>
+  </body>
+</html>

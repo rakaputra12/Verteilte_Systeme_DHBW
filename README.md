@@ -130,7 +130,7 @@ docker network ls
 Daher wird eine Liste dargestellt. Dann können die Containers gestartet werden.
 
 ```bash
- docker run --network=my_network -p 8000:8000 --env-file=../.env --name api-micro api-micro:1
+docker run --network=my_network -p 8000:8000 --env-file=../.env --name api-micro api-micro:1
 
 docker run -d -p 5984:5984 --network=my_network --name couchdb dhbw-couch:1
 ```
@@ -383,7 +383,15 @@ Letztendlich kann der Microservice von einer Frontend-Anwendung aus zugegriffen 
 
 Dazu muss man zum Verzeichnis **../Frontend** navigieren, wo die HTML-Datei abgelegt ist. Die Datei kann einfach mit einem Webbrowser geöffnet werden.
 
-die Web-Anwendung sollte so aussehen:
+die erste Web-Anwendung sollte so aussehen:
 
-![Local Image](frontend-anwendung.png)
+![Local Image](frontend-anwendung1.png)
+
+
+eine andere Web-Anwendung steht auch zur Verfügung unter dem Dateiname **"index_2.html"**
+
+![Local Image](frontend-anwendung2.png)
+
+
+**Bitte beachten**, dass die angegebene URL auf der Frontend sich auf die Implementierung bei Kubernetes bezieht. Es gilt aber nur bei index_2.html.
 
