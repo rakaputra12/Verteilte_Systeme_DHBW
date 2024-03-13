@@ -139,13 +139,20 @@ Hier sollte Microservice auf die Datenbank zugreifen können.
 
 Eine andere Alternative zum Testen des Microservices besteht darin, ihn lokal auszuführen, ohne dass er in einem Container läuft. Dazu können die folgende Schritte ausgeführt werden:
 
-1. Aus dem Verzeichnis (dort, wo die main.py sich befindet) kann der folgender Befehl ausgeführt werden:
+1. Bevor das Microservice lokal ausgeführt wird, muss wahrscheinlich die **.../requirements.txt** auch händisch installiert werden.
+
+```bash
+pip install -r requirements.txt 
+```
+
+
+2. Aus dem Verzeichnis (dort, wo die main.py sich befindet) kann der folgender Befehl ausgeführt werden:
 
 ```bash
 uvicorn main:app --reload
 ```
 
-2. Zum Testen kann der folgender Befehl nochmal ausgeführt werden:
+3. Zum Testen kann der folgender Befehl nochmal ausgeführt werden:
 
 ```bash
 curl -X POST -H "Content-Type: application/json" 'http://localhost:8000/api/v1/get_data?month=12&day=28'
