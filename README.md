@@ -82,12 +82,18 @@ docker run -p 8000:8000 --env-file=../.env --name api-micro api-micro:1
 Die Verfügbarkeit des Microservices kann überprüft werde, indem  eine Anfrage an den Endpunkt gesendet. Beispiel mit cURL:
 
 ```bash
-curl http://localhost:8000
+curl -i "http://localhost:8000"
 ```
 
 Das Ergebnis sollte wie folgt aussehen:
 
 ```json
+HTTP/1.1 404 Not Found
+date: Fri, 15 Mar 2024 09:49:59 GMT
+server: uvicorn
+content-length: 22
+content-type: application/json
+
 {"detail":"Not Found"}
 ```
 
@@ -98,12 +104,19 @@ Das zurückgegebene Ergebnis, nämlich {"detail": "Not Found"}, ist erwartet und
  Selbst wenn Parameter für den Test des Microservices verwendet werden, sollte es  zu einer **"Internal Server Error"**-Antwort kommen, die auf Kommunikationsprobleme zwischen dem Microservice-Container und dem CouchDB-Container hinweist. 
 
  ```bash
- curl -X POST -H "Content-Type: application/json" 'http://localhost:8000/api/v1/get_data?month=12&day=28'
+ curl -i -X POST "http://localhost:8000/api/v1/get_data?month=12&day=28"
+'
  ```
  Das Ergenis sieht so aus:
 
  ```json
- {"detail":"Internal Server Error"}
+ HTTP/1.1 500 Internal Server Error
+date: Fri, 15 Mar 2024 09:52:12 GMT
+server: uvicorn
+content-length: 34
+content-type: application/json
+
+{"detail":"Internal Server Error"}
  ```
  
 
@@ -155,7 +168,7 @@ uvicorn main:app --reload
 3. Zum Testen kann der folgender Befehl nochmal ausgeführt werden:
 
 ```bash
-curl -X POST -H "Content-Type: application/json" 'http://localhost:8000/api/v1/get_data?month=12&day=28'
+curl -i -X POST "http://localhost:8000/api/v1/get_data?month=12&day=28"
 ```
 
 Das Ergebnis sollte so aussehen:
