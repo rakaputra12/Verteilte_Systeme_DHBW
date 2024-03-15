@@ -174,12 +174,14 @@ curl -i -X POST "http://localhost:8000/api/v1/get_data?month=12&day=28"
 Das Ergebnis sollte so aussehen:
 
 ```json
-[
-    {"name":"Carl Remigius Fresenius","profession":"Chemist","born":"28.12.1818"},
-    {"name":"John von Neumann","profession":"Mathematician, Physicist, Computer Scientist","born":"28.12.1903"},
-    {"name":"Nichelle Nichols","profession":"Actress","born":"28.12.1932"},
-    {"name":"Linus Torvalds","profession":"Software Engineer","born":"28.12.1969"}
+HTTP/1.1 200 OK
+date: Fri, 15 Mar 2024 09:57:02 GMT
+server: uvicorn
+content-length: 337
+content-type: application/json
 
+[
+  {"name":"Carl Remigius Fresenius","profession":"Chemist","born":"28.12.1818"},{"name":"John von Neumann","profession":"Mathematician, Physicist, Computer Scientist","born":"28.12.1903"},{"name":"Nichelle Nichols","profession":"Actress","born":"28.12.1932"},{"name":"Linus Torvalds","profession":"Software Engineer","born":"28.12.1969"}
 ]
 ```
 
