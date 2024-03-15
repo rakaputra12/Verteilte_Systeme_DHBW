@@ -105,7 +105,6 @@ Das zurückgegebene Ergebnis, nämlich {"detail": "Not Found"}, ist erwartet und
 
  ```bash
  curl -i -X POST "http://localhost:8000/api/v1/get_data?month=12&day=28"
-'
  ```
  Das Ergenis sieht so aus:
 
