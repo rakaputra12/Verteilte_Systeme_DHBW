@@ -1,5 +1,7 @@
 # Programmentwurf Verteilte Systeme
 
+Dieses Projekt ist auch auf Github unter dem folgenden Link zu finden: 
+https://github.com/rakaputra12/Verteilte_Systeme_DHBW
 
 ### Raka Pradnya Putra Adita 8778662
 
