@@ -5,10 +5,6 @@
 
 In diesem Projekt wird ein einfacher Geburtstags-Microservice mit Python entwickelt, der direkt auf die CouchDB-Datenbank über die HTTP-API zugreift. Der Microservice ermöglicht das Abrufen von Geburtstagsinformationen basierend auf dem Monat und dem Datum. Hierfür wird die CouchDB-Datenbank nach entsprechenden Einträgen durchsucht. Die entwickelte Lösung verwendet die Programmiersprache Python, die CouchDB HTTP-API für den direkten Datenbankzugriff und FastAPI als Framework. Neben der grundlegenden Funktionalität des Geburtstagsabrufs integriert der Microservice auch Kubernetes und Docker für eine effiziente Containerisierung und Bereitstellung in einer Clusterumgebung.
 
-## Motivation
-
-Ein wissenschaftlicher Blog beabsichtigt, auf seiner Startseite anzuzeigen, ob eine bedeutende Persönlichkeit aus dem Bereich Wissenschaft und Forschung heute Geburtstag hat. Hierfür nutzt der Blog einen Microservice namens "MicroAPI", um auf eine CouchDB-Datenbank zuzugreifen. Der Microservice überprüft, ob es für den aktuellen Tag Geburtstagseinträge gibt und liefert bei Treffern entsprechende Informationen zurück, die dann auf der Startseite des Blogs angezeigt werden. Dies ermöglicht den Bloglesern, auf eine unterhaltsame und informative Weise die Geburtstage herausragender Persönlichkeiten aus der Wissenschaft zu verfolgen.
-
 ## Funktionalität
 
 Der Microservice stellt die Hauptfunktion bereit, Geburtstagsinformationen anhand des Monats und des Datums in der CouchDB-Datenbank abzurufen.
