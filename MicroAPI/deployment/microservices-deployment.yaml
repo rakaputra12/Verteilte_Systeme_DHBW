@@ -1,48 +1,48 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/v1           
+kind: Deployment              # Art des Kubernetes-Objekts, das erstellt wird (Deployment)
 metadata:
-  name: microservice
+  name: microservice          # Der Name des Deployments
   labels:
-    app: microservice
+    app: microservice        # Labels für das Deployment
 spec:
-  replicas: 1
+  replicas: 1                 # Die Anzahl der Replikate, die erstellt werden sollen
   selector:
     matchLabels:
-      app: microservice
+      app: microservice      # Selektor für die Pods, die gemanagt werden sollen
   template:
     metadata:
       labels:
-        app: microservice
+        app: microservice    # Labels für die Pods
     spec:
       containers:
-      - name: microservice
-        image: api-micro:1
+      - name: microservice   # Der Name des Containers
+        image: api-micro:1   # Die Docker-Image-Referenz für den Container
         ports:
-        - containerPort: 8000
-        env:
-        - name: COUCHDB_URL
+        - containerPort: 8000 
+        env:                  # Umgebungsvariablen für den Container
+        - name: COUCHDB_URL   # Name der Umgebungsvariablen
           valueFrom:
-            configMapKeyRef:
-              name: microservice-configmap
-              key: COUCHDB_URL
-        - name: DB_NAME
+            configMapKeyRef:  # Verweis auf ein Schlüssel-Wert-Paar in einem ConfigMap-Objekt
+              name: microservice-configmap  # Der Name der ConfigMap
+              key: COUCHDB_URL              # Der Schlüssel in der ConfigMap
+        - name: DB_NAME       # Name der Umgebungsvariablen
           valueFrom:
-            configMapKeyRef:
-              name: microservice-configmap  
-              key: DB_NAME
-        - name: COUCHDB_USERNAME
+            configMapKeyRef:  # Verweis auf ein Schlüssel-Wert-Paar in einem ConfigMap-Objekt
+              name: microservice-configmap  # Der Name der ConfigMap
+              key: DB_NAME                  # Der Schlüssel in der ConfigMap
+        - name: COUCHDB_USERNAME  # Name der Umgebungsvariablen
           valueFrom:
-            secretKeyRef:
-              name: microservice-secrets 
-              key: COUCHDB_USERNAME
-        - name: COUCHDB_PASSWORD
+            secretKeyRef:     # Verweis auf einen Schlüssel in einem Secret-Objekt
+              name: microservice-secrets # Der Name des Secrets
+              key: COUCHDB_USERNAME      # Der Schlüssel im Secret
+        - name: COUCHDB_PASSWORD      # Name der Umgebungsvariablen
           valueFrom:
-            secretKeyRef:
-              name: microservice-secrets 
-              key: COUCHDB_PASSWORD
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 8000
-          initialDelaySeconds: 5
-          periodSeconds: 10
+            secretKeyRef:     # Verweis auf einen Schlüssel in einem Secret-Objekt
+              name: microservice-secrets # Der Name des Secrets
+              key: COUCHDB_PASSWORD      # Der Schlüssel im Secret
+        readinessProbe:       # Konfiguration für die Readiness-Probe
+          httpGet:           
+            path: /health    # Der Endpunkt, der überprüft wird
+            port: 8000       # Der Port, auf dem der Endpunkt erreichbar ist
+          initialDelaySeconds: 5   
+          periodSeconds: 10         

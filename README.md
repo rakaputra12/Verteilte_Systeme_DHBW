@@ -69,6 +69,7 @@ Nach der erfolgreichen Erstellung der CouchDB Instanz muss auch der Microservice
 ```bash
 docker build -t api-micro:1 .
 ```
+
 Nach dem erfolgreichen Build kann der Container gestartet werden:
 
 ```bash
@@ -137,7 +138,7 @@ Dazu kann man mit diesen Befehl überprüfen, ob das Netz erfolgreich erstellt i
 ```bash
 docker network ls
 ```
-Daher wird eine Liste dargestellt. Dann können die Containers gestartet werden.
+Daher wird eine Liste dargestellt. Dazu muss die vorherige Container gestopt werden. Dann können die neue konfigurierte Containers gestartet werden. Wichtig zu beachten, dass es erstmal wieder zum Verzeichnis **../MicroAPI** navigiert werden muss, um die Container auszuführen.
 
 ```bash
 docker run --network=my_network -p 8000:8000 --env-file=../.env --name api-micro api-micro:1
@@ -147,14 +148,16 @@ docker run -d -p 5984:5984 --network=my_network --name couchdb dhbw-couch:1
 
 Hier sollte Microservice auf die Datenbank zugreifen können.
 
-Eine andere Alternative zum Testen des Microservices besteht darin, ihn lokal auszuführen, ohne dass er in einem Container läuft. Dazu können die folgende Schritte ausgeführt werden:
+Eine andere Alternative zum Testen des Microservices besteht darin, ihn **lokal** auszuführen, ohne dass er in einem Container läuft. Dazu können die folgende Schritte ausgeführt werden:
 
-1. Bevor das Microservice lokal ausgeführt wird, muss wahrscheinlich die **.../requirements.txt** auch händisch installiert werden.
+
+**Bitte beachten:** Dazu muss ein virtuelle Enviroment erstellt werden. es muss zum Hauptverzeichnis nochmal navigiert werden ("Abgabe" Ordner-Ebene).Dazu kann diese Webseite bei der Erstellung und Aktivierung helfen. https://towardsdatascience.com/getting-started-with-python-virtual-environments-252a6bd2240
+
+1. Bevor das Microservice lokal ausgeführt wird, muss wahrscheinlich die **.../requirements.txt** auch händisch installiert werden. **Wichtig zu beachten**, dass es sich im MicroAPI-Ordner befindet.
 
 ```bash
 pip install -r requirements.txt 
 ```
-
 
 2. Aus dem Verzeichnis (dort, wo die main.py sich befindet) kann der folgender Befehl ausgeführt werden:
 
@@ -243,59 +246,7 @@ so sieht die Ausgabe aus.
 
 Nachdem die CouchDB Image Container auf dem Cluster bereitgestellt wurde, sollte der Microservices auch darauf bereitgestellt werden. Dazu sind ein YAML-Dateien für Deployment und Service vom Microservices erforderlich. 
 
-Hier ein Beispiel für eine YAML-Konfiguration für die Bereitstellung des Microservices **"MicroAPI"**:
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: microservice
-  labels:
-    app: microservice
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: microservice
-  template:
-    metadata:
-      labels:
-        app: microservice
-    spec:
-      containers:
-      - name: microservice
-        image: api-micro:1 
-        ports:
-        - containerPort: 8000
-        env:
-        - name: COUCHDB_URL
-          valueFrom:
-            configMapKeyRef:
-              name: microservice-configmap
-              key: COUCHDB_URL
-        - name: DB_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: microservice-configmap  
-              key: DB_NAME
-        - name: COUCHDB_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: microservice-secrets 
-              key: COUCHDB_USERNAME
-        - name: COUCHDB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: microservice-secrets 
-              key: COUCHDB_PASSWORD
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 8000
-          initialDelaySeconds: 5
-          periodSeconds: 10
-
-```
+Dazu gibt es ein Beispiel für eine YAML-Konfiguration für die Bereitstellung des Microservices **"MicroAPI"** unter dem Dateinamen **microservices-deployment.yaml**
 
 Aus dem Beispiel YAML-Datei ist wichtig zu beachten, dass die Image Container "api-micro:1" durch den tatsächlichen Bildnamen und das Tag für Ihren Microservice ersetzt werden muss. Außerdem muss auch der Abschnitt env beachtet werden, wo die Umgebungsvariable für CouchDB definiert wird. In dem Fall wird der Parametes **"imagePullPolicy"** nicht gesetzt, weil das Image vom Microservices in keiner Container-Registrierung verfügbar ist und es lokal erstellt werden muss.
 

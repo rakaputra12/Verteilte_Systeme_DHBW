@@ -1,13 +1,13 @@
-apiVersion: v1
-kind: Service
+apiVersion: v1                  
+kind: Service                   # Art des Kubernetes-Objekts, das erstellt wird (Service)
 metadata:
-  name: microservice
+  name: microservice            # Der Name des Services
   labels:
-    app: microservice
+    app: microservice          # Labels für den Service
 spec:
-  type: LoadBalancer
+  type: LoadBalancer           # Der Typ des Services (in diesem Fall ein Load Balancer als Best Practice)
   ports:
-  - port: 80
-    targetPort: 8000
+  - port: 80                   # Die Portnummer, unter der der Service erreichbar ist
+    targetPort: 8000           # Die Portnummer, auf der die Pods des Ziel-Containers lauschen
   selector:
-    app: microservice
+    app: microservice          # Selektor für die Pods, die der Service exponieren soll
